@@ -3,6 +3,8 @@ import pygame
 from Objects.Basketball import Basketball
 from Objects.Hoop import Hoop
 from GameManager import GameManager
+from ANN import ANN
+import random
 
 # Initialization
 pygame.init()
@@ -27,12 +29,14 @@ clock = pygame.time.Clock()
 # Game Objects
 hoop1 = Hoop(700, 200)
 basketball1 = Basketball(100, 100, hoop1)
-gamemanager1 = GameManager(basketball1)
+ann = ANN(hoop1, basketball1)
+gamemanager1 = GameManager(basketball1, hoop1, ann)
 
 # Game State Variables
 shotCharging = False
 shotPower = 0
 running = True
+hasShot = False
 
 # Main Game Loop
 while running:
@@ -45,21 +49,25 @@ while running:
             shotCharging = True
         if event.type == pygame.MOUSEBUTTONUP:
             shotCharging = False
+            hasShot = True
             basketball1.shoot(shotPower)
             shotPower = 0
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_r:
+                hasShot = True
                 gamemanager1.reset()
                 shotCharging = False
                 shotPower = 0
 
     # 2. Logic Update
-    basketball1.update(HEIGHT, WIDTH)
+    if hasShot == True:
+        basketball1.update(HEIGHT, WIDTH)
     gamemanager1.update()
+    ann.update()
     
     if shotCharging == True:
         shotPower += 0.5
-
+    
     # 3. Rendering
     Screen.fill(WHITE)
     

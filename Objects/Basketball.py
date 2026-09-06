@@ -1,4 +1,5 @@
 import pygame
+import random
 
 #Colors
 HOOPORANGE = (255, 165, 0)
@@ -6,23 +7,28 @@ HOOPORANGE = (255, 165, 0)
 
 class Basketball:
     def __init__(self, start_x, start_y, hoop):
-        # Start Position
-        self.StartPos = pygame.math.Vector2(start_x, start_y)
+        # Physics
+        self.radius = 24
+        self.bounce_factor = -0.8
+        self.gravity = 0.5
+
+        # Random start position
+        Randomx = random.randint(self.radius, 400-self.radius)
+        Randomy = random.randint(self.radius, 600- self.radius)
 
         # Position
-        self.x = start_x
-        self.y = start_y
+        self.x = Randomx
+        self.y = Randomy
         self.old_x = 0
         self.old_y = 0
+
+        # Start Position
+        self.StartPos = pygame.math.Vector2(self.x, self.y)
         
         # Velocity
         self.vel_x = 0
         self.vel_y = 0
         
-        # Physics
-        self.radius = 24
-        self.bounce_factor = -0.8
-        self.gravity = 0.5
         
         # Gamestate
         self.Hoop = hoop
@@ -34,7 +40,7 @@ class Basketball:
 
     def shoot(self, power):
         self.vel_y -= power
-        self.vel_x += power * 0.5
+        self.vel_x += power * 0.4
 
     def update(self, floor_y, floor_x):
         V_pos = pygame.math.Vector2(self.x, self.y)
@@ -104,8 +110,8 @@ class Basketball:
                 self.scoreTimer = pygame.time.get_ticks()
 
     def reset(self):
-        self.x = self.StartPos.x
-        self.y = self.StartPos.y
+        self.x = random.randint(self.radius, 400-self.radius)
+        self.y = random.randint(self.radius, 600- self.radius)
 
         self.vel_x = 0
         self.vel_y = 0
