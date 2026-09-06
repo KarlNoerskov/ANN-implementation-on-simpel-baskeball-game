@@ -13,13 +13,15 @@ class Basketball:
         self.bounce_factor = -0.8
         self.gravity = 0.5
         self.Hoop = hoop
+        self.scored = False
+        self.scoreTimer = 0
 
     def draw(self, background):
         pygame.draw.circle(background, self.farve, (self.x, self.y), self.radius)
 
     def shoot(self, power):
         self.vel_y -= power
-        self.vel_x += power
+        self.vel_x += power * 0.5
 
 
     def update(self, floor_y, floor_x):
@@ -34,8 +36,10 @@ class Basketball:
         self.y += self.vel_y
         self.x += self.vel_x
         
-        # 3. check collision
+        # 3. check collision and if scored
         self.collisionChecker(floor_y, floor_x, V_pos, V_vel)
+        self.has_scored()
+        
 
 
     def collisionChecker(self, floor_y, floor_x, V_pos, V_vel):
@@ -81,4 +85,15 @@ class Basketball:
             self.vel_x = newVel.x * -self.bounce_factor
             self.vel_y = newVel.y * -self.bounce_factor
 
+    def has_scored(self):
+        if self.scoreTimer != 0 and pygame.time.get_ticks() - self.scoreTimer  < 1000:
+            return
+        else:
+            BetweenGoalPoast = False
+            if self.x >= self.Hoop.left_rim.x + self.Hoop.rim_radius and self.x <= self.Hoop.right_rim.x + self.Hoop.rim_radius:
+                if self.y >= self.Hoop.left_rim.y and self.y <= self.Hoop.left_rim.y + self.Hoop.rim_radius:
+                    BetweenGoalPoast = True
+            if self.vel_y > 0 and BetweenGoalPoast:
+                self.scored = True
+                self.scoreTimer = pygame.time.get_ticks()
 
