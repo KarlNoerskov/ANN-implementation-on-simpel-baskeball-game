@@ -1,58 +1,65 @@
 import pygame
 
-ORANGE = (255, 165, 0)
+#Colors
+HOOPORANGE = (255, 165, 0)
+
 
 class Basketball:
     def __init__(self, start_x, start_y, hoop):
+        # Start Position
+        self.StartPos = pygame.math.Vector2(start_x, start_y)
+
+        # Position
         self.x = start_x
         self.y = start_y
-        self.radius = 24
-        self.farve = ORANGE
+        self.old_x = 0
+        self.old_y = 0
+        
+        # Velocity
         self.vel_x = 0
         self.vel_y = 0
+        
+        # Physics
+        self.radius = 24
         self.bounce_factor = -0.8
         self.gravity = 0.5
+        
+        # Gamestate
         self.Hoop = hoop
         self.scored = False
         self.scoreTimer = 0
 
     def draw(self, background):
-        pygame.draw.circle(background, self.farve, (self.x, self.y), self.radius)
+        pygame.draw.circle(background, HOOPORANGE, (self.x, self.y), self.radius)
 
     def shoot(self, power):
         self.vel_y -= power
         self.vel_x += power * 0.5
 
-
     def update(self, floor_y, floor_x):
         V_pos = pygame.math.Vector2(self.x, self.y)
         V_vel = pygame.math.Vector2(self.vel_x, self.vel_y)
         
-        # 1. Update vel with gravity
         self.vel_y += self.gravity
         
+        self.old_y = self.y
+        self.old_x = self.x
         
-        # 2. update pos
         self.y += self.vel_y
         self.x += self.vel_x
         
-        # 3. check collision and if scored
         self.collisionChecker(floor_y, floor_x, V_pos, V_vel)
         self.has_scored()
-        
-
 
     def collisionChecker(self, floor_y, floor_x, V_pos, V_vel):
-        self.collisionWall (floor_y, floor_x)
+        self.collisionWall(floor_y, floor_x)
         self.collisionHoop(V_pos, V_vel)
 
     def collisionWall(self, floor_y, floor_x):
-        # Y logic
         if self.y + self.radius >= floor_y:
             self.y = floor_y - self.radius
             self.vel_y = self.vel_y * self.bounce_factor
 
-        # X logic
         if self.x + self.radius >= floor_x:
             self.x = floor_x - self.radius
             self.vel_x = self.vel_x * self.bounce_factor
@@ -63,37 +70,45 @@ class Basketball:
     def collisionHoop(self, V_pos, V_vel):
         distanceLeftRim = V_pos.distance_to(self.Hoop.left_rim)
         if distanceLeftRim <= self.radius + self.Hoop.rim_radius:
-            #move ball out
             normal = (V_pos - self.Hoop.left_rim).normalize()
             distance = self.radius + self.Hoop.rim_radius + 1
             self.x = self.Hoop.left_rim.x + normal.x * distance
             self.y = self.Hoop.left_rim.y + normal.y * distance
-            #move ball opposite way of impact
+            
             newVel = V_vel.reflect(normal)
             self.vel_x = newVel.x * -self.bounce_factor
             self.vel_y = newVel.y * -self.bounce_factor
 
         distanceRightRim = V_pos.distance_to(self.Hoop.right_rim)
         if distanceRightRim <= self.radius + self.Hoop.rim_radius:
-            #move ball out
             normal = (V_pos - self.Hoop.right_rim).normalize()
             distance = self.radius + self.Hoop.rim_radius + 1
             self.x = self.Hoop.right_rim.x + normal.x * distance
             self.y = self.Hoop.right_rim.y + normal.y * distance
-            #move ball opposite way of impact
+            
             newVel = V_vel.reflect(normal)
             self.vel_x = newVel.x * -self.bounce_factor
             self.vel_y = newVel.y * -self.bounce_factor
 
     def has_scored(self):
-        if self.scoreTimer != 0 and pygame.time.get_ticks() - self.scoreTimer  < 1000:
+        if self.scoreTimer != 0 and pygame.time.get_ticks() - self.scoreTimer < 1000:
             return
         else:
             BetweenGoalPoast = False
             if self.x >= self.Hoop.left_rim.x + self.Hoop.rim_radius and self.x <= self.Hoop.right_rim.x + self.Hoop.rim_radius:
-                if self.y >= self.Hoop.left_rim.y and self.y <= self.Hoop.left_rim.y + self.Hoop.rim_radius:
+                if self.y > self.Hoop.y and self.old_y <= self.Hoop.y:
                     BetweenGoalPoast = True
+                    
             if self.vel_y > 0 and BetweenGoalPoast:
                 self.scored = True
                 self.scoreTimer = pygame.time.get_ticks()
 
+    def reset(self):
+        self.x = self.StartPos.x
+        self.y = self.StartPos.y
+
+        self.vel_x = 0
+        self.vel_y = 0
+
+        self.scored = False
+        self.scoreTimer = 0
