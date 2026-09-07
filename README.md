@@ -90,10 +90,16 @@ If `python3` does not work on your system, try:
 
     ANN-implementation-on-simpel-baskeball-game/
     │
+    ├── Objects/
+    │   ├── Basketball.py
+    │   └── Hoop.py
+    │
+    ├── .gitignore
+    ├── ANN.py
+    ├── GameManager.py
     ├── Main.py
-    ├── requirements.txt
     ├── README.md
-    └── ...
+    └── requirements.txt
 
 ## Version 2.0?
 
