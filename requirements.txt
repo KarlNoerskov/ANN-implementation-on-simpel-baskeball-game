@@ -2,3 +2,4 @@ Python 3.x https://www.python.org/downloads/
 pygame
 numpy
 "shell command: pip3 install pygame numpy"
+should be run in a virtual environment as to not affect other projects on your computer
