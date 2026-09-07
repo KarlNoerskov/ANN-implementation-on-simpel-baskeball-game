@@ -7,21 +7,37 @@ BLACK = (0, 0, 0)
 class GameManager:
     def __init__(self, Ball, Hoop, ANN):
         # References and State
-        self.ball = Ball
+        self.balls = Ball
         self.score = 0
         self.hoop = Hoop
-        self.ann = ANN
+        self.anns = ANN
+        self.generation = 0
+        self.resetTimer = pygame.time.get_ticks()
 
     def update(self):
         # Score Tracking Logic
-        if self.ball.scored:
-            self.score += 1
-            self.ball.scored = False
-            print("{score}", self.score)
+        for ball in self.balls:
+            if ball.scored:
+                self.score += 1
+                ball.scored = False
+                print("{score}", self.score)
+        if pygame.time.get_ticks() - self.resetTimer > 4000: 
+            bestANN = None
+            for ann in self.anns:
+                if bestANN == None or ann.fitnessScore > bestANN.fitnessScore:
+                    bestANN = ann
+            print (bestANN.fitnessScore)
+            self.resetTimer = pygame.time.get_ticks()
+            self.reset()
+
+        
 
     def reset(self):
         self.score = 0
-        self.ball.reset()
+        for ball in self.balls:
+            ball.reset()
         self.hoop.reset()
-        self.ann.reset()
-        self.ann.calculate_shot_power()
+        for ann in self.anns:
+            ann.reset()
+            ann.calculate_shot_power()
+        self.generation += 1

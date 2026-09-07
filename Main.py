@@ -27,31 +27,34 @@ my_font = pygame.font.SysFont(None, 48)
 clock = pygame.time.Clock()
 
 # Game Objects
+numberOfANNs = range(200)
 hoop1 = Hoop(700, 200)
-basketball1 = Basketball(100, 100, hoop1)
-ann = ANN(hoop1, basketball1)
-gamemanager1 = GameManager(basketball1, hoop1, ann)
+balls = []
+anns = []
+for x in numberOfANNs:
+    newBall = Basketball(100, 100, hoop1)
+    balls.append(newBall)
+    newAnn = ANN(hoop1, newBall)
+    anns.append(newAnn)
+
+    
+
+gamemanager1 = GameManager(balls, hoop1, anns)
+gamemanager1.reset()
+
 
 # Game State Variables
 shotCharging = False
 shotPower = 0
 running = True
-hasShot = False
+hasShot = True
 
 # Main Game Loop
 while running:
-    
     # 1. Event Handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            shotCharging = True
-        if event.type == pygame.MOUSEBUTTONUP:
-            shotCharging = False
-            hasShot = True
-            basketball1.shoot(shotPower)
-            shotPower = 0
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_r:
                 hasShot = True
@@ -60,22 +63,23 @@ while running:
                 shotPower = 0
 
     # 2. Logic Update
-    if hasShot == True:
-        basketball1.update(HEIGHT, WIDTH)
+    for ball in balls:
+        ball.update(HEIGHT, WIDTH)
+    for ann in anns:
+        ann.update()
     gamemanager1.update()
-    ann.update()
-    
-    if shotCharging == True:
-        shotPower += 0.5
+
     
     # 3. Rendering
     Screen.fill(WHITE)
-    
-    basketball1.draw(Screen)
+    for ball in balls:
+        ball.draw(Screen)
     hoop1.draw(Screen)
     
     score_text = my_font.render(f"Score: {gamemanager1.score}", True, BLACK)
     Screen.blit(score_text, (20, 20))
+    score_text = my_font.render(f"Score: {ann.fitnessScore}", True, BLACK)
+    Screen.blit(score_text, (400, 20))
     
     pygame.display.flip()
     clock.tick(60)

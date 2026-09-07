@@ -26,14 +26,24 @@ class ANN:
 
         # Smallest distance
         self.smallestDistance = None
+        self.fitnessScore = 0
 
     def update(self):
+        self.BasketballVec =  self.BasketballVec = pygame.math.Vector2(self.basketball.x, self.basketball.y)
         self.smallestDistanceToRimFromBall()
         
 
     def smallestDistanceToRimFromBall(self):
         if self.smallestDistance == None or self.BasketballVec.distance_to(self.HoopVec) < self.smallestDistance:
             self.smallestDistance = pygame.math.Vector2(self.basketball.x, self.basketball.y).distance_to(self.HoopVec)
+            #we want the succes score to be posetive, so we minus by 1000 pixels to get that a good score i positive
+            #we put in power to make it eksponentielly better to be close
+        fitness = (self.smallestDistance - 1000)**2
+        if self.basketball.scored:
+            fitness = fitness * 10000 
+        if fitness > self.fitnessScore:
+            self.fitnessScore = fitness
+            #print (fitness)
 
         
     def calculate_shot_power(self):
@@ -43,9 +53,9 @@ class ANN:
         power = float(second[0])
         
         if power < 0:
-            self.basketball.shoot(0)
-        else:
-            self.basketball.shoot(power)
+            power = 0
+
+        self.basketball.shoot(self.sigmoid(power, 20.0))
 
     def reset(self):
         self.BasketballX = self.basketball.x
@@ -62,4 +72,7 @@ class ANN:
         self.deltaArray = numpy.array([self.deltaX, self.deltaY])
 
         self.smallestDistance = None
+
+    def sigmoid(self, floaty, x):
+        return 1/(1 + numpy.exp(-floaty)) * x
 
