@@ -14,11 +14,12 @@ In this implementaion i do it with 500 ANNs at a time running for
 
 
 -- installation --
-see requirements.txt
-clone this repository with git:clone or download it as raw files.
-while in directory "ANN-implementation-on-simpel-baskeball-game" 
-run "Python3 Main.py"
+
+see requirements.txt.  
+clone this repository with git:clone or download it as raw files.  
+while in directory "ANN-implementation-on-simpel-baskeball-game"  
+run "Python3 Main.py"  
 
 
--- Author --
+-- Author --  
 Karl August Nørskov
