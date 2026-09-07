@@ -1,3 +1,4 @@
+<img width="966" height="720" alt="ezgif-56f65b42ea3994dc" src="https://github.com/user-attachments/assets/7281f8f3-df9b-4f9e-a064-3729cbacd7d4" />
 -- Artificial neural network (ANN) used on simpel basketball-game --
 Build a artificial neural network with the ability of training on a
 simpel basketball-game i also made.
@@ -7,6 +8,8 @@ it a small amount.
 In this implementaion i do it with 500 ANNs at a time running for
 400 frames before going to the next generation.
 
+-- GIF --
+<img width="966" height="720" alt="ezgif-56f65b42ea3994dc" src="https://github.com/user-attachments/assets/7281f8f3-df9b-4f9e-a064-3729cbacd7d4" />
 
 
 -- installation --
