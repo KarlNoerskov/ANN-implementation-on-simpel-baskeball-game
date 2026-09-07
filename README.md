@@ -1,25 +1,82 @@
--- Artificial neural network (ANN) used on simpel basketball-game --
+# Artificial Neural Network used on a simple basketball game
 
-Build a artificial neural network with the ability of training on a  
-simpel basketball-game i also made.  
-The ANN trains via neuro-evolution by from generation to generation  
-choosing the ANN with the best fitness-score and randomly mutating  
-it a small amount.  
-In this implementaion i do it with 500 ANNs at a time running for  
-400 frames before going to the next generation.  
+An artificial neural network (ANN) used on a simple basketball game.
 
+The ANN trains using neuro-evolution. From generation to generation, the ANN with the best fitness score is selected and randomly mutated by a small amount.
 
+In this implementation, 500 ANNs are running at the same time. Each generation runs for 400 frames before the fitness scores are compared and the next generation is created.
 
-<img width="500" height="300" alt="ezgif-56f65b42ea3994dc" src="https://github.com/user-attachments/assets/7281f8f3-df9b-4f9e-a064-3729cbacd7d4" />
+![ANN playing the basketball game](https://github.com/user-attachments/assets/7281f8f3-df9b-4f9e-a064-3729cbacd7d4)
 
+## How it works
 
--- installation --
+Each generation starts with 500 ANNs.
 
-see requirements.txt.  
-clone this repository with git:clone or download it as raw files.  
-while in directory "ANN-implementation-on-simpel-baskeball-game"  
-run "Python3 Main.py"  
+The ANNs all play the game for 400 frames. After the 400 frames, each ANN gets a fitness score based on how well it performed.
 
+The ANN with the highest fitness score is then selected. This ANN is copied and the copies are randomly mutated by a small amount to create the next generation.
 
--- Author --  
+This process is repeated over and over, allowing the ANN to gradually improve its performance.
+
+The basic process is:
+
+1. Create 500 ANNs.
+2. Run each ANN for 400 frames.
+3. Calculate the fitness score for each ANN.
+4. Select the ANN with the highest fitness score.
+5. Copy the best ANN.
+6. Randomly mutate the copies.
+7. Use the mutated ANNs as the next generation.
+8. Repeat.
+
+## Training
+
+The current implementation uses:
+
+- 500 ANNs per generation
+- 400 frames per generation
+- Neuro-evolution
+- Fitness-based selection
+- Random mutation
+
+The ANN is not trained using backpropagation. Instead, the weights of the network are changed through random mutations and the networks that perform better are kept for the next generation.
+
+## Installation
+
+See `requirements.txt` for the required Python packages.
+
+Clone this repository:
+
+    git clone https://github.com/KarlNoerskov/ANN-implementation-on-simpel-baskeball-game.git
+
+Go into the project directory:
+
+    cd ANN-implementation-on-simpel-baskeball-game
+
+Install the requirements:
+
+    pip install -r requirements.txt
+
+Run the program:
+
+    python3 Main.py
+
+If `python3` does not work on your system, try:
+
+    python Main.py
+
+## Project structure
+
+    ANN-implementation-on-simpel-baskeball-game/
+    │
+    ├── Main.py
+    ├── requirements.txt
+    ├── README.md
+    └── ...
+
+## Author
+
 Karl August Nørskov
+
+GitHub:
+https://github.com/KarlNoerskov/ANN-implementation-on-simpel-baskeball-game
