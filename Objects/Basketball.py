@@ -13,12 +13,14 @@ class Basketball:
         self.gravity = 0.5
 
         # Random start position
-        Randomx = random.randint(self.radius, 400-self.radius)
-        Randomy = random.randint(self.radius, 600- self.radius)
+        #Randomx = random.randint(self.radius, 400-self.radius)
+        #Randomy = random.randint(self.radius, 600- self.radius)
 
         # Position
-        self.x = Randomx
-        self.y = Randomy
+        self.startx = start_x
+        self.starty = start_y
+        self.x = start_x
+        self.y = start_y
         self.old_x = 0
         self.old_y = 0
 
@@ -38,9 +40,9 @@ class Basketball:
     def draw(self, background):
         pygame.draw.circle(background, HOOPORANGE, (self.x, self.y), self.radius)
 
-    def shoot(self, power):
-        self.vel_y -= power
-        self.vel_x += power * 0.4
+    def shoot(self, powerx, powery):
+        self.vel_y -= powery
+        self.vel_x += powerx
 
     def update(self, floor_y, floor_x):
         V_pos = pygame.math.Vector2(self.x, self.y)

@@ -2,7 +2,7 @@ import pygame
 import numpy
 
 class ANN:
-    def __init__(self, Hoop, Basketball):
+    def __init__(self, Hoop, Basketball, SCREENWIDTH, SCREENHEIGHT):
         # Basketball Y and X
         self.basketball = Basketball
         self.BasketballX = Basketball.x
@@ -11,7 +11,7 @@ class ANN:
 
         # Weights
         self.W_1 = numpy.random.randn(2, 10)
-        self.W_2 = numpy.random.randn(10, 1)
+        self.W_2 = numpy.random.randn(10, 2)
 
         # Hoop X and Y
         self.hoop = Hoop
@@ -20,8 +20,10 @@ class ANN:
         self.HoopVec = pygame.math.Vector2(self.hoopX - Hoop.rimWidth / 2, self.hoopY)
 
         # Delta distance to hoop
-        self.deltaX = self.BasketballX - self.hoopX
-        self.deltaY = self.BasketballY - self.hoopY
+        self.screenwidth = SCREENWIDTH
+        self.screenheight = SCREENHEIGHT
+        self.deltaX = (self.BasketballX - self.hoopX) / self.screenwidth * 2 - 1
+        self.deltaY = (self.BasketballY - self.hoopY) / self.screenheight * 2 - 1
         self.deltaArray = numpy.array([self.deltaX, self.deltaY])
 
         # Smallest distance
@@ -29,7 +31,7 @@ class ANN:
         self.fitnessScore = 0
 
     def update(self):
-        self.BasketballVec =  self.BasketballVec = pygame.math.Vector2(self.basketball.x, self.basketball.y)
+        self.BasketballVec = pygame.math.Vector2(self.basketball.x, self.basketball.y)
         self.smallestDistanceToRimFromBall()
         
 
@@ -50,12 +52,11 @@ class ANN:
         first = numpy.dot(self.deltaArray, self.W_1)
         second = numpy.dot(first, self.W_2)
         
-        power = float(second[0])
-        
-        if power < 0:
-            power = 0
+        powerx = float(second[0])
+        powery = float(second[1])
 
-        self.basketball.shoot(self.sigmoid(power, 20.0))
+        #print(self.sigmoid(powerx, 20))
+        self.basketball.shoot(self.sigmoid(powerx, 20.0), self.sigmoid(powery, 20.0))
 
     def reset(self):
         self.BasketballX = self.basketball.x
@@ -67,12 +68,34 @@ class ANN:
         self.hoopY = self.hoop.y
         self.HoopVec = pygame.math.Vector2(self.hoopX - self.hoop.rimWidth / 2, self.hoopY)
 
-        self.deltaX = self.BasketballX - self.hoopX
-        self.deltaY = self.BasketballY - self.hoopY
+        self.deltaX = (self.BasketballX - self.hoopX) / self.screenwidth * 2 - 1
+        self.deltaY = (self.BasketballY - self.hoopY) / self.screenheight * 2 - 1
         self.deltaArray = numpy.array([self.deltaX, self.deltaY])
 
         self.smallestDistance = None
 
     def sigmoid(self, floaty, x):
         return 1/(1 + numpy.exp(-floaty)) * x
+
+    def updateBasketball(self, Basketball):
+        self.basketball = Basketball
+        self.BasketballX = Basketball.x
+        self.BasketballY = Basketball.y
+        self.BasketballVec = pygame.math.Vector2(self.BasketballX, self.BasketballY)
+
+
+        # Delta distance to hoop
+        self.deltaX = (self.BasketballX - self.hoopX) / self.screenwidth * 2 - 1
+        self.deltaY = (self.BasketballY - self.hoopY) / self.screenheight * 2 - 1
+        self.deltaArray = numpy.array([self.deltaX, self.deltaY])
+
+        # Smallest distance
+        self.smallestDistance = None
+        self.fitnessScore = 0
+
+    def mutation(self, mutationrate):
+        W_1mutation = numpy.random.randn(2, 10) * mutationrate
+        w_2mutation = numpy.random.randn(10, 2) * mutationrate
+        self.W_1 = self.W_1 + W_1mutation
+        self.W_2 = self.W_2 + w_2mutation
 

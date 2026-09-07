@@ -14,7 +14,7 @@ class Hoop:
 
         # Random start position
         Randomx = random.randint(600, 800 - self.rimWidth)
-        Randomy = random.randint(50, 500)
+        Randomy = random.randint(50, 300)
         
 
         # Position

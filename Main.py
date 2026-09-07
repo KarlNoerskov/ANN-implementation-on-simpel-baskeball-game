@@ -27,20 +27,13 @@ my_font = pygame.font.SysFont(None, 48)
 clock = pygame.time.Clock()
 
 # Game Objects
-numberOfANNs = range(200)
 hoop1 = Hoop(700, 200)
-balls = []
-anns = []
-for x in numberOfANNs:
-    newBall = Basketball(100, 100, hoop1)
-    balls.append(newBall)
-    newAnn = ANN(hoop1, newBall)
-    anns.append(newAnn)
 
-    
 
-gamemanager1 = GameManager(balls, hoop1, anns)
-gamemanager1.reset()
+
+gamemanager1 = GameManager(hoop1, WIDTH, HEIGHT)
+gamemanager1.createFirstGen()
+
 
 
 # Game State Variables
@@ -63,26 +56,28 @@ while running:
                 shotPower = 0
 
     # 2. Logic Update
-    for ball in balls:
+    for ball in gamemanager1.balls:
         ball.update(HEIGHT, WIDTH)
-    for ann in anns:
+    for ann in gamemanager1.anns:
         ann.update()
     gamemanager1.update()
 
     
     # 3. Rendering
     Screen.fill(WHITE)
-    for ball in balls:
+    for ball in gamemanager1.balls:
         ball.draw(Screen)
     hoop1.draw(Screen)
     
     score_text = my_font.render(f"Score: {gamemanager1.score}", True, BLACK)
-    Screen.blit(score_text, (20, 20))
-    score_text = my_font.render(f"Score: {ann.fitnessScore}", True, BLACK)
-    Screen.blit(score_text, (400, 20))
+    Screen.blit(score_text, (20, 10))
+    fitnessscore = my_font.render(f"Score: {ann.fitnessScore}", True, BLACK)
+    Screen.blit(fitnessscore, (400, 10))
+    generation = my_font.render(f"Gen: {gamemanager1.generation}", True, BLACK)
+    Screen.blit(generation, (200, 10))
     
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(240)
 
 
 pygame.quit()
