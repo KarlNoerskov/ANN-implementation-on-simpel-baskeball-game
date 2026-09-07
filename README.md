@@ -42,8 +42,29 @@ The current implementation uses:
 The ANN is not trained using backpropagation. Instead, the weights of the network are changed through random mutations and the networks that perform better are kept for the next generation.
 
 ## Installation
+Python can be downloaded from:
+https://www.python.org/downloads/
 
 See `requirements.txt` for the required Python packages.
+
+It is recommended to use a virtual environment so the installed packages do not affect other Python projects on your computer.
+
+Create a virtual environment:
+
+    python3 -m venv venv
+
+Activate it on Linux/macOS:
+
+    source venv/bin/activate
+
+On Windows:
+
+    venv\Scripts\activate
+
+Install the required packages:
+
+    pip install -r requirements.txt
+
 
 Clone this repository:
 
@@ -77,6 +98,3 @@ If `python3` does not work on your system, try:
 ## Author
 
 Karl August Nørskov
-
-GitHub:
-https://github.com/KarlNoerskov/ANN-implementation-on-simpel-baskeball-game
