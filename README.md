@@ -8,7 +8,7 @@ In this implementaion i do it with 500 ANNs at a time running for
 400 frames before going to the next generation.
 
 -- GIF --
-<img width="500" height="250" alt="ezgif-56f65b42ea3994dc" src="https://github.com/user-attachments/assets/7281f8f3-df9b-4f9e-a064-3729cbacd7d4" />
+<img width="500" height="300" alt="ezgif-56f65b42ea3994dc" src="https://github.com/user-attachments/assets/7281f8f3-df9b-4f9e-a064-3729cbacd7d4" />
 
 
 -- installation --
