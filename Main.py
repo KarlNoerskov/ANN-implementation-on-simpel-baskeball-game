@@ -4,7 +4,6 @@ from Objects.Basketball import Basketball
 from Objects.Hoop import Hoop
 from GameManager import GameManager
 from ANN import ANN
-import random
 
 # Initialization
 pygame.init()
@@ -18,7 +17,6 @@ pygame.display.set_caption("ANN Basketball")
 # Colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-ORANGE = (255, 165, 0)
 
 # Fonts
 my_font = pygame.font.SysFont(None, 48)
@@ -37,10 +35,9 @@ gamemanager1.createFirstGen()
 
 
 # Game State Variables
-shotCharging = False
-shotPower = 0
 running = True
-hasShot = True
+framesTillReset = 400
+frames = 0
 
 # Main Game Loop
 while running:
@@ -75,9 +72,17 @@ while running:
     Screen.blit(fitnessscore, (400, 10))
     generation = my_font.render(f"Gen: {gamemanager1.generation}", True, BLACK)
     Screen.blit(generation, (200, 10))
-    
+
+    framesTillReset -= 1
+    if framesTillReset == 0:
+        framesTillReset = 400
+        gamemanager1.newgen()
     pygame.display.flip()
-    clock.tick(240)
+
+    if gamemanager1.generation < 100:
+        clock.tick(2000)
+    else:
+        clock.tick(60)
 
 
 pygame.quit()

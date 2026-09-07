@@ -7,22 +7,22 @@ HOOPCOLOR = (248, 129, 88)
 
 class Hoop:
     def __init__(self, start_x, start_y):
-        # Dimensions and Collisions
+        # --- Dimensions and Collisions ---
         self.rimWidth = 90
         self.rimHeight = 3
         self.rim_radius = 1.5
 
-        # Random start position
+        # --- Random start position ---
         Randomx = random.randint(600, 800 - self.rimWidth)
         Randomy = random.randint(50, 300)
         
 
-        # Position
+        # --- Position ---
         self.x = Randomx
         self.y = Randomy
         
         
-        # Rim Vectors
+        # --- Rim Vectors ---
         self.left_rim = pygame.math.Vector2(self.x, self.y + (self.rimHeight / 2))
         self.right_rim = pygame.math.Vector2(self.x + self.rimWidth, self.y + (self.rimHeight / 2))
 
@@ -41,4 +41,3 @@ class Hoop:
         self.y = random.randint(50, 500)
         self.left_rim = pygame.math.Vector2(self.x, self.y + (self.rimHeight / 2))
         self.right_rim = pygame.math.Vector2(self.x + self.rimWidth, self.y + (self.rimHeight / 2))
-        

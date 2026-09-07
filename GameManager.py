@@ -1,18 +1,15 @@
 import pygame
-import copy
 import random
+import copy
 from ANN import ANN
 from Objects.Basketball import Basketball
 
-# Colors
-BLACK = (0, 0, 0)
-
-
 class GameManager:
     def __init__(self, Hoop, SCREENWIDTH, SCREENHEIGHT):
+        # --- General Settings ---
         self.numberOfANNS = range(500)
-        # References and State
-        #self.balls = Ball
+        
+        # --- References and State ---
         self.balls = []
         self.score = 0
         self.hoop = Hoop
@@ -20,6 +17,8 @@ class GameManager:
         self.generation = 1
         self.resetTimer = pygame.time.get_ticks()
         self.bestANN = None
+        
+        # --- Environment Dimensions ---
         self.screenwidth = SCREENWIDTH
         self.screenheight = SCREENHEIGHT
 
@@ -29,15 +28,14 @@ class GameManager:
             if ball.scored:
                 self.score += 1
                 ball.scored = False
-        if pygame.time.get_ticks() - self.resetTimer > 1500: 
-            print("{generation}", self.generation)
-            print("{score}", self.score)
-            self.score = 0
-            self.generation += 1
-            self.createNewANNSFromBest()
-            self.resetTimer = pygame.time.get_ticks()
 
-        
+
+    def newgen(self):
+        print("{generation}", self.generation)
+        print("{score}", self.score)
+        self.createNewANNSFromBest()
+        self.score = 0
+        self.generation += 1
 
     def reset(self):
         self.score = 0
@@ -72,6 +70,7 @@ class GameManager:
         self.balls = []
         if self.score > 100:
             self.hoop.reset()
+            self.generation = 1
         if self.score > 100:
             ballx = random.randint(oldball.radius, 400-oldball.radius)
             bally = random.randint(oldball.radius, 600 - oldball.radius)
@@ -82,15 +81,14 @@ class GameManager:
         for x in self.numberOfANNS:
             newBall = Basketball(ballx, bally, self.hoop)
             self.balls.append(newBall)
-            newAnn = copy.deepcopy(self.bestANN)
-            newAnn.updateBasketball(newBall)
+            newAnn = ANN(self.hoop, newBall, self.screenwidth, self.screenheight)
+            newAnn.W_1 = self.bestANN.W_1.copy()
+            newAnn.W_2 = self.bestANN.W_2.copy()
             newAnn.fitnessScore = 0
             self.anns.append(newAnn)
-            if self.score == 0:
-                newAnn.mutation(1)
-            else:
-                newAnn.mutation(1 * 0.95**self.generation)
-        print(1 * (0.95**self.generation))
+            newAnn.mutation(max(0.005, 1 * 0.95**self.generation))
+
+        print(max(0.005, 1 * 0.95**self.generation))
         newBall1 = Basketball(ballx, bally, self.hoop)
         self.balls.append(newBall1)
         self.bestANN.updateBasketball(newBall1)
@@ -98,4 +96,3 @@ class GameManager:
 
         for x in self.anns:
             x.calculate_shot_power()
-

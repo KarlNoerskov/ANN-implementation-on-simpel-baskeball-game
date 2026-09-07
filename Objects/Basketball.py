@@ -7,16 +7,16 @@ HOOPORANGE = (255, 165, 0)
 
 class Basketball:
     def __init__(self, start_x, start_y, hoop):
-        # Physics
+        # --- Physics ---
         self.radius = 24
         self.bounce_factor = -0.8
         self.gravity = 0.5
 
-        # Random start position
+        # --- Random start position ---
         #Randomx = random.randint(self.radius, 400-self.radius)
         #Randomy = random.randint(self.radius, 600- self.radius)
 
-        # Position
+        # --- Position ---
         self.startx = start_x
         self.starty = start_y
         self.x = start_x
@@ -24,15 +24,14 @@ class Basketball:
         self.old_x = 0
         self.old_y = 0
 
-        # Start Position
+        # --- Start Position ---
         self.StartPos = pygame.math.Vector2(self.x, self.y)
         
-        # Velocity
+        # --- Velocity ---
         self.vel_x = 0
         self.vel_y = 0
         
-        
-        # Gamestate
+        # --- Gamestate ---
         self.Hoop = hoop
         self.scored = False
         self.scoreTimer = 0
