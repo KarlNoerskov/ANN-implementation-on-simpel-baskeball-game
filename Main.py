@@ -1,89 +1,78 @@
-import sys
-import pygame
-from Objects.Basketball import Basketball
-from Objects.Hoop import Hoop
-from GameManager import GameManager
-from ANN import ANN
+from environment.basketball_environment import BasketballEnvironment
+from evolution.evolution import Evolution
+from rendering.rendering import Renderer
 
-# Initialization
-pygame.init()
+def main():
+    renderer = Renderer()
+    environment = BasketballEnvironment(renderer=renderer)
+    evolution = Evolution(population_size=500, elite_count=10)
+    scenariosPrGen = 10
+    scenariosLastTest = 50
+    best_overall_fitness = float("-inf")
 
-# Screen Setup
-WIDTH = 1400
-HEIGHT = 800
-Screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("ANN Basketball")
+    for generation in range(200):
+        gen_number = generation + 1
 
-# Colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
+        scenarios = [
+            environment.create_scenario()
+            for _ in range(scenariosPrGen)
+        ]
 
-# Fonts
-my_font = pygame.font.SysFont(None, 48)
+        total_fitnesses = [0.0] * len(evolution.population)
 
-# Time and Framerate
-clock = pygame.time.Clock()
+        for s_idx, scenario in enumerate(scenarios):
+            scenario_number = s_idx + 1
 
-# Game Objects
-hoop1 = Hoop(700, 200)
+            scenario_fitnesses = environment.evaluate_population_parallel(evolution.population, scenario, gen_number, scenario_number, best_overall_fitness)
+
+            for i, fit in enumerate(scenario_fitnesses):
+                total_fitnesses[i] += fit
+
+        avg_fitnesses = [fit / scenariosPrGen for fit in total_fitnesses]
+
+        current_best = max(avg_fitnesses)
+        if current_best > best_overall_fitness:
+            best_overall_fitness = current_best
+
+        evolution.next_generation(avg_fitnesses)
+        print(f"Generation {gen_number}: best average fitness = {current_best:.2f}")
 
 
+    scenarios = [
+                environment.create_scenario()
+                for _ in range(scenariosLastTest)
+            ]
+    
+    total_fitnesses = [0.0] * len(evolution.population)
 
-gamemanager1 = GameManager(hoop1, WIDTH, HEIGHT)
-gamemanager1.createFirstGen()
+    for s_idx, scenario in enumerate(scenarios):
+        scenario_number = s_idx + 1
 
+        scenario_fitnesses = environment.evaluate_population_parallel(evolution.population, scenario, 999, scenario_number, best_overall_fitness)
 
+        for i, fit in enumerate(scenario_fitnesses):
+            total_fitnesses[i] += fit
 
-# Game State Variables
-running = True
-framesTillReset = 400
-frames = 0
+    avg_fitnesses = [fit / scenariosLastTest for fit in total_fitnesses]
 
-# Main Game Loop
-while running:
-    # 1. Event Handling
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_r:
-                hasShot = True
-                gamemanager1.reset()
-                shotCharging = False
-                shotPower = 0
+    current_best = max(avg_fitnesses)
+    if current_best > best_overall_fitness:
+        best_overall_fitness = current_best
 
-    # 2. Logic Update
-    for ball in gamemanager1.balls:
-        ball.update(HEIGHT, WIDTH)
-    for ann in gamemanager1.anns:
-        ann.update()
-    gamemanager1.update()
+    champion_index = avg_fitnesses.index(current_best)
+    champion_network = evolution.population[champion_index]
+    showcase_scenario_number = 1
+    
+    while True:
+        nyt_scenario = environment.create_scenario()
+
+        environment.evaluate_population_parallel([champion_network], nyt_scenario, 1000, showcase_scenario_number, best_overall_fitness)
+        
+        showcase_scenario_number += 1
+
 
     
-    # 3. Rendering
-    Screen.fill(WHITE)
-    for ball in gamemanager1.balls:
-        ball.draw(Screen)
-    hoop1.draw(Screen)
     
-    score_text = my_font.render(f"Score: {gamemanager1.score}", True, BLACK)
-    Screen.blit(score_text, (20, 10))
-    fitnessscore = my_font.render(f"Score: {ann.fitnessScore}", True, BLACK)
-    Screen.blit(fitnessscore, (400, 10))
-    generation = my_font.render(f"Gen: {gamemanager1.generation}", True, BLACK)
-    Screen.blit(generation, (200, 10))
-
-    framesTillReset -= 1
-    if framesTillReset == 0:
-        framesTillReset = 400
-        gamemanager1.newgen()
-    pygame.display.flip()
-
-    if gamemanager1.generation < 100:
-        clock.tick(2000)
-    else:
-        clock.tick(60)
-
-
-pygame.quit()
-sys.exit()
+    
+if __name__ == "__main__":
+    main()
