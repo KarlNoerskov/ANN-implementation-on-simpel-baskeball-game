@@ -99,7 +99,7 @@ If `python3` does not work on your system, try:
 
 ## Version 2.0?
 
-In the future, a version 2.0 should either use backpropagation, or the fitness score should be determined over three different hoop positions.
+In the future, a version 2.0 should either use backpropagation, or the fitness score should be determined over three multiple hoop positions.
 
 Right now, the ANNs are training to hit a specific hoop from a specific distance, instead of training to hit any hoop from any distance.
 
