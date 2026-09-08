@@ -6,7 +6,8 @@ The ANN trains using neuro-evolution. From generation to generation, the ANN wit
 
 In this implementation, 500 ANNs are running at the same time. Each generation runs for 400 frames before the fitness scores are compared and the next generation is created.
 
-![ANN playing the basketball game](https://github.com/user-attachments/assets/7281f8f3-df9b-4f9e-a064-3729cbacd7d4)
+<img width="800" height="450" alt="basketball gif" src="https://github.com/user-attachments/assets/a7129cd3-f2be-4bea-a57c-9f86f5b52e30" />
+
 
 ## How it works
 
