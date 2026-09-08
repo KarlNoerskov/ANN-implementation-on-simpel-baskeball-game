@@ -39,7 +39,7 @@ The current implementation uses:
 - Fitness-based selection
 - Random mutation
 
-The ANN is not trained using backpropagation. Instead, the weights of the network are changed through random mutations and the networks that perform better are kept for the next generation.
+The ANN is not trained using backpropagation. Instead, the weights of the network are changed through random mutations and the network that perform better are kept for the next generation.
 
 ## Installation
 Python can be downloaded from:
