@@ -61,10 +61,6 @@ On Windows:
 
     venv\Scripts\activate
 
-Install the required packages:
-
-    pip install -r requirements.txt
-
 
 Clone this repository:
 
