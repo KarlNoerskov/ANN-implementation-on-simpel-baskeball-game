@@ -9,8 +9,8 @@ from ANN import ANN
 pygame.init()
 
 # Screen Setup
-WIDTH = 800
-HEIGHT = 600
+WIDTH = 1400
+HEIGHT = 800
 Screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("ANN Basketball")
 
