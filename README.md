@@ -27,7 +27,6 @@ Currently, the neuroevolution model successfully hits the target approximately 9
 
 **Planned Version 2.0 Features:**
 * Implementing **backpropagation** to compare training speeds and efficiency against the current neuroevolution approach.
-* Modifying the fitness evaluation to train the network on dynamic generalization (hitting any hoop from any distance) rather than specializing in fixed scenarios.
 
 ## Installation
 
@@ -36,6 +35,62 @@ Python can be downloaded from [python.org](https://www.python.org/downloads/).
 It is recommended to use a virtual environment so the installed packages do not affect other Python projects on your computer.
 
 **1. Clone this repository:**
-```bash
+```
 git clone [https://github.com/KarlNoerskov/artificial-neural-network-implemented-on-simple-basketballgame.git](https://github.com/KarlNoerskov/artificial-neural-network-implemented-on-simple-basketballgame.git)
 cd artificial-neural-network-implemented-on-simple-basketballgame
+```
+
+2. Create a virtual environment:
+```
+python3 -m venv venv
+```
+
+3. Activate the environment:
+```
+On Linux/macOS: source venv/bin/activate
+```
+```
+On Windows: venv\Scripts\activate
+```
+
+4. Install the requirements:
+```
+pip install -r requirements.txt
+```
+
+5. Run the program:
+
+```
+python3 Main.py
+```
+(If python3 does not work on your system, try running python Main.py)
+
+```
+Project Structure
+Plaintext
+artificial-neural-network-implemented-on-simple-basketballgame/
+│
+├── environment/
+│   └── basketball_environment.py
+│
+├── evolution/
+│   └── evolution.py
+│
+├── game/
+│   └── Objects/
+│       ├── Basketball.py
+│       └── Hoop.py
+│
+├── neural_network/
+│   └── neural_network.py
+│
+├── rendering/
+│   └── rendering.py
+│
+├── .gitignore
+├── Main.py
+├── README.md
+└── requirements.txt
+```
+Author
+Karl August Nørskov
